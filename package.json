@@ -1,0 +1,35 @@
+{
+  "name": "tweakers-price-webtask",
+  "version": "1.0.0",
+  "description": "Product price watch for tweakers.net",
+  "main": "index.js",
+  "scripts": {
+    "test": "./node_modules/.bin/mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/imiric/tweakers-price-webtask.git"
+  },
+  "keywords": [
+    "tweakers",
+    "dutch",
+    "netherlands",
+    "price",
+    "webtask",
+    "cron"
+  ],
+  "author": "Ivan Mirić",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/imiric/tweakers-price-webtask/issues"
+  },
+  "homepage": "https://github.com/imiric/tweakers-price-webtask#readme",
+  "dependencies": {
+    "accounting": "^0.4.1",
+    "bluebird": "^3.4.1",
+    "cheerio": "^0.20.0",
+    "mongodb": "^2.1.18",
+    "pushbullet": "^1.4.3",
+    "request-promise": "^3.0.0"
+  }
+}
