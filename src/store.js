@@ -8,6 +8,12 @@ function ProductStore(dbUrl) {
 }
 
 
+/**
+ * Save product price information
+ * @param {string} pName - The name of the product.
+ * @param {Number} price - The price of the product.
+ * @returns {Promise} A promise that resolves to the result of the insertion.
+ */
 ProductStore.prototype.saveProductPrice = function(pName, price) {
   return mp.MongoClient.connect(this.dbUrl)
     .then(function(db) {
@@ -25,6 +31,12 @@ ProductStore.prototype.saveProductPrice = function(pName, price) {
 };
 
 
+/**
+ * Get the minimum stored price of the product
+ * @param {string} pName - The name of the product.
+ * @returns {Promise.<Number>} A promise that resolves to the minimum stored
+ *   price of the product or null if not found.
+ */
 ProductStore.prototype.getMinPrice = function(pName) {
   return mp.MongoClient.connect(this.dbUrl)
     .then(function(db) {
