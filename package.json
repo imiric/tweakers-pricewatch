@@ -30,6 +30,7 @@
     "cheerio": "^0.20.0",
     "mongodb": "^2.1.18",
     "pushbullet": "^1.4.3",
-    "request-promise": "^3.0.0"
+    "request-promise": "^3.0.0",
+    "yargs": "^4.7.1"
   }
 }
