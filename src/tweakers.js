@@ -6,16 +6,18 @@
 
 const rp = require('request-promise'),
       $ = require('cheerio'),
-      accounting = require('accounting');
+      accounting = require('accounting'),
+      pick = require('lodash.pick'),
+      merge = require('lodash.merge');
 
 module.exports = exports = {};
 
 
 /**
- * Retrieve the minimum price of a product
+ * Retrieve the product with the minimum price
  * @param {string} pName - The name of the product.
- * @returns {Promise.<Number>} A promise that resolves to the minimum price of
- *   the product or null if not found.
+ * @returns {Promise.<Object>} A promise that resolves to a a product object
+ *   with the minimum price.
  */
 exports.getProductMinPrice = function(pName) {
   const reqOptions = {
@@ -31,17 +33,23 @@ exports.getProductMinPrice = function(pName) {
   };
 
   return rp(reqOptions).then(function(res) {
-    let minPrice = null;
+    let prod = {keyword: pName, minPrice: null};
     if (typeof res.entities !== 'undefined' && res.entities.length > 0) {
       // Pick the first result
       let product = res.entities.filter(function(ent) {
         return ent.type == 'product';
-      }).shift();
-      let mp = $(product ? product.minPrice : null);
-      if (typeof mp[0] !== 'undefined') {
-        minPrice = accounting.unformat(mp[0].children[0].data, ',');
+      }).shift(),
+          mp = [];
+
+      if (product) {
+        prod = merge(prod, pick(product, ['name', 'link']));
+        mp = $(product.minPrice);
+      }
+      if (mp.length) {
+        prod.minPrice = accounting.unformat(mp[0].children[0].data, ',');
+        prod.minPricePretty = accounting.formatMoney(prod.minPrice, '€', 2);
       }
     }
-    return minPrice;
+    return prod;
   });
 };

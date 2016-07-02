@@ -9,21 +9,17 @@ function ProductStore(dbUrl) {
 
 
 /**
- * Save product price information
- * @param {string} pName - The name of the product.
- * @param {Number} price - The price of the product.
+ * Save a product to the DB
+ * @param {Object} product - The product object.
  * @returns {Promise} A promise that resolves to the result of the insertion.
  */
-ProductStore.prototype.saveProductPrice = function(pName, price) {
+ProductStore.prototype.saveProduct = function(product) {
   return mp.MongoClient.connect(this.dbUrl)
     .then(function(db) {
       return db.collection('products')
         .then(function(collection) {
-          return collection.insert({
-            productName: pName,
-            price: price,
-            timestamp: new Date()
-          });
+          product.timestamp = new Date();
+          return collection.insert(product);
         }).then(function() {
           db.close();
         });
@@ -33,21 +29,21 @@ ProductStore.prototype.saveProductPrice = function(pName, price) {
 
 /**
  * Get the minimum stored price of the product
- * @param {string} pName - The name of the product.
- * @returns {Promise.<Number>} A promise that resolves to the minimum stored
- *   price of the product or null if not found.
+ * @param {string} keyword - The product lookup keyword.
+ * @returns {Promise.<Object>} A promise that resolves to the product object
+ *   with the minimum price.
  */
-ProductStore.prototype.getMinPrice = function(pName) {
+ProductStore.prototype.getProductMinPrice = function(keyword) {
   return mp.MongoClient.connect(this.dbUrl)
     .then(function(db) {
       return db.collection('products')
         .then(function(collection) {
-          return collection.find({productName: pName});
+          return collection.find({keyword: keyword});
         }).then(function(data) {
-          return data.sort({price: 1}).limit(1).toArray()
+          return data.sort({minPrice: 1}).limit(1).toArray()
             .then(function(results) {
               db.close();
-              return results.length ? results[0].price : null;
+              return results.length ? results[0] : null;
             });
         });
     });

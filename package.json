@@ -27,6 +27,8 @@
   "dependencies": {
     "accounting": "^0.4.1",
     "cheerio": "^0.20.0",
+    "lodash.merge": "^4.4.0",
+    "lodash.pick": "^4.2.1",
     "mongodb-promise": "0.0.4",
     "pushbullet": "^1.4.3",
     "request-promise": "^3.0.0",
