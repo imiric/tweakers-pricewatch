@@ -1,5 +1,5 @@
 {
-  "name": "tweakers-price-webtask",
+  "name": "tweakers-pricewatch",
   "version": "1.0.0",
   "description": "Product price watch for tweakers.net",
   "main": "index.js",
@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/imiric/tweakers-price-webtask.git"
+    "url": "git+https://github.com/imiric/tweakers-pricewatch.git"
   },
   "keywords": [
     "tweakers",
@@ -21,9 +21,9 @@
   "author": "Ivan Mirić",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/imiric/tweakers-price-webtask/issues"
+    "url": "https://github.com/imiric/tweakers-pricewatch/issues"
   },
-  "homepage": "https://github.com/imiric/tweakers-price-webtask#readme",
+  "homepage": "https://github.com/imiric/tweakers-pricewatch#readme",
   "dependencies": {
     "accounting": "^0.4.1",
     "cheerio": "^0.20.0",
