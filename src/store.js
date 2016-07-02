@@ -1,8 +1,6 @@
 'use strict';
 
-const Promise = require('bluebird'),
-      mongodb = Promise.promisifyAll(require('mongodb')),
-      using = Promise.using;
+const mp = require('mongodb-promise');
 
 
 function ProductStore(dbUrl) {
@@ -10,45 +8,37 @@ function ProductStore(dbUrl) {
 }
 
 
-ProductStore.prototype.getConnectionAsync = function() {
-  return mongodb.MongoClient.connectAsync(this.dbUrl)
-    .disposer(function(connection) {
-      connection.close();
-    });
-};
-
-
 ProductStore.prototype.saveProductPrice = function(pName, price) {
-  return using(
-    this.getConnectionAsync(),
-    function(connection) {
-      return connection.collectionAsync('products')
+  return mp.MongoClient.connect(this.dbUrl)
+    .then(function(db) {
+      return db.collection('products')
         .then(function(collection) {
-          collection.insertOne({
+          return collection.insert({
             productName: pName,
             price: price,
             timestamp: new Date()
           });
+        }).then(function() {
+          db.close();
         });
-    }
-  );
+    });
 };
 
 
 ProductStore.prototype.getMinPrice = function(pName) {
-  return using(
-    this.getConnectionAsync(),
-    function(connection) {
-      return connection.collectionAsync('products')
+  return mp.MongoClient.connect(this.dbUrl)
+    .then(function(db) {
+      return db.collection('products')
         .then(function(collection) {
-          return collection.findAsync({productName: pName});
+          return collection.find({productName: pName});
         }).then(function(data) {
-          return data.sort({price: 1}).limit(1).toArrayAsync();
+          return data.sort({price: 1}).limit(1).toArray()
+            .then(function(results) {
+              db.close();
+              return results.length ? results[0].price : null;
+            });
         });
-    }
-  ).then(function(results) {
-    return results.length ? results[0].price : null;
-  });
+    });
 };
 
 
